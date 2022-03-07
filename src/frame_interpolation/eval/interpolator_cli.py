@@ -145,24 +145,17 @@ class ProcessDirectory(beam.DoFn):
       media.set_ffmpeg(ffmpeg_path)
 
   def process(self, directory: str):
-    logger.debug(directory)
-    
-    #input_frames_list = [
-    #    natsort.natsorted(tf.io.gfile.glob(glob_pat))
-    #    for ext in _INPUT_EXT
-    #]
     input_frames_list = []
     for ext in _INPUT_EXT:
         glob_pat = f'{directory}/*.{ext}'
-        logger.debug(glob_pat)
         found_frames = tf.io.gfile.glob(glob_pat)
-        logger.debug(found_frames)
         found_frames = natsort.natsorted(found_frames)
-        logger.debug(found_frames)
+        #if found_frames:
+        #    logger.debug(glob_pat)
+        #    logger.debug(f"{len(found_frames)} frames detected.")
         input_frames_list.append(found_frames)
-    logger.debug(input_frames_list)
     input_frames = functools.reduce(lambda x, y: x + y, input_frames_list)
-    logger.debug(input_frames)
+    logger.debug(f"{len(input_frames)} frames detected.")
     logging.info('Generating in-between frames for %s.', directory)
     frames = list(
         util.interpolate_recursively_from_files(
