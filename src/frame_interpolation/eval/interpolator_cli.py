@@ -119,6 +119,7 @@ def _output_frames(frames: List[np.ndarray], frames_dir: str):
 
   """
   if tf.io.gfile.isdir(frames_dir):
+    # to do: replace this with pathlib invocation
     old_frames = tf.io.gfile.glob(os.path.join(frames_dir, 'frame_*.png'))
     if old_frames:
       logging.info('Removing existing frames from %s.', frames_dir)
